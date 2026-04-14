@@ -504,32 +504,36 @@
    *   VoltaUI.initScrollReveal('.fade-in', { threshold: 0.3 });
    */
   function initScrollReveal(selector, opts) {
-    selector     = selector || '.reveal';
-    opts         = opts     || {};
-    var threshold    = opts.threshold    !== undefined ? opts.threshold    : 0.15;
-    var visibleClass = opts.visibleClass || 'visible';
-
+    // Simple fade-up effect for .reveal, .reveal-img, .reveal-title (no stagger/3D)
+    selector = selector || '.reveal, .reveal-img, .reveal-title';
+    opts = opts || {};
+    var threshold = opts.threshold !== undefined ? opts.threshold : 0.15;
     var elements = qsa(selector);
 
-    if (!('IntersectionObserver' in window)) {
-      // Graceful degradation — show everything immediately
-      elements.forEach(function (el) { el.classList.add(visibleClass); });
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+      // Fallback: just show all
+      elements.forEach(function (el) { el.style.opacity = 1; });
       return;
     }
 
-    var observer = new IntersectionObserver(
-      function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add(visibleClass);
-            observer.unobserve(entry.target); // fire once only
-          }
-        });
-      },
-      { threshold: threshold }
-    );
+    elements.forEach(function (el) {
+      var animProps = { opacity: 0, y: 24 };
+      var animTo = { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' };
 
-    elements.forEach(function (el) { observer.observe(el); });
+      if (el.classList.contains('reveal-img')) {
+        animProps = { opacity: 0, scale: 0.98, y: 20 };
+        animTo = { opacity: 1, scale: 1, y: 0, duration: 0.65, ease: 'power2.out' };
+      }
+
+      ScrollTrigger.create({
+        trigger: el,
+        start: 'top 95%',
+        once: true,
+        onEnter: function() {
+          gsap.fromTo(el, animProps, animTo);
+        }
+      });
+    });
   }
 
 
