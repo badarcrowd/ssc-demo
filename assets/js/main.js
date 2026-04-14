@@ -8,7 +8,7 @@
  *   - GSAP          https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js
  *   - ScrollTrigger https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js
  *
- * Public API (all functions are exported on the `VoltaUI` namespace):
+ * Public API (all functions are exported on the `SSCUI` namespace):
  * ┌──────────────────────────────┬──────────────────────────────────────────────────┐
  * │ Function                     │ Purpose                                          │
  * ├──────────────────────────────┼──────────────────────────────────────────────────┤
@@ -28,7 +28,7 @@
  * Reuse on another project:
  *   1. Copy this file into your project.
  *   2. Load GSAP + ScrollTrigger before this script.
- *   3. Call the individual functions you need, OR call VoltaUI.init()
+ *   3. Call the individual functions you need, OR call SSCUI.init()
  *      with an optional config object to boot everything at once.
  *   4. Adjust CSS class names via the config arguments if your markup
  *      uses different class conventions.
@@ -77,11 +77,11 @@
    * Call this once, before any other GSAP-dependent function.
    *
    * @example
-   *   VoltaUI.initGSAP();
+   *   SSCUI.initGSAP();
    */
   function initGSAP() {
     if (typeof gsap === 'undefined') {
-      console.warn('[VoltaUI] GSAP not found — make sure it is loaded before main.js');
+      console.warn('[SSCUI] GSAP not found — make sure it is loaded before main.js');
       return;
     }
     gsap.registerPlugin(ScrollTrigger);
@@ -109,16 +109,16 @@
    * @returns {object|null} The Lenis instance, or null if Lenis is not loaded.
    *
    * @example
-   *   VoltaUI.initLenis({ duration: 1.5 });
+   *   SSCUI.initLenis({ duration: 1.5 });
    */
   function initLenis(opts) {
     if (typeof Lenis === 'undefined') {
-      console.warn('[VoltaUI] Lenis not found — load Lenis before main.js');
+      console.warn('[SSCUI] Lenis not found — load Lenis before main.js');
       return null;
     }
     opts = opts || {};
     var lenis = new Lenis({
-      duration:    opts.duration  !== undefined ? opts.duration : 1.2,
+      duration:    opts.duration  !== undefined ? opts.duration : 5,
       easing:      opts.easing    || function (t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
       smooth:      opts.smooth    !== undefined ? opts.smooth   : true,
       smoothTouch: opts.smoothTouch || false,
@@ -181,8 +181,8 @@
    * @returns {void}
    *
    * @example
-   *   VoltaUI.initStickyNarrative();
-   *   VoltaUI.initStickyNarrative({ sectionSelector: '#mySection' });
+   *   SSCUI.initStickyNarrative();
+   *   SSCUI.initStickyNarrative({ sectionSelector: '#mySection' });
    */
   function initStickyNarrative(opts) {
     opts = opts || {};
@@ -202,7 +202,7 @@
     if (!sectionEl || !items.length || !leftEl) return;
 
     if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
-      console.warn('[VoltaUI] initStickyNarrative requires GSAP + ScrollTrigger');
+      console.warn('[SSCUI] initStickyNarrative requires GSAP + ScrollTrigger');
       return;
     }
 
@@ -287,8 +287,8 @@
    * @returns {void}
    *
    * @example
-   *   VoltaUI.initTilt3D();
-   *   VoltaUI.initTilt3D({ maxRotate: 8, stageSelector: '#myStage' });
+   *   SSCUI.initTilt3D();
+   *   SSCUI.initTilt3D({ maxRotate: 8, stageSelector: '#myStage' });
    */
   function initTilt3D(opts) {
     opts = opts || {};
@@ -307,7 +307,7 @@
     if (!stageEl || !cardEl) return;
 
     if (typeof gsap === 'undefined') {
-      console.warn('[VoltaUI] initTilt3D requires GSAP');
+      console.warn('[SSCUI] initTilt3D requires GSAP');
       return;
     }
 
@@ -416,7 +416,7 @@
    * @returns {gsap.core.Timeline|null} The GSAP timeline, or null if elements missing.
    *
    * @example
-   *   VoltaUI.setupHorizontalScroll({
+   *   SSCUI.setupHorizontalScroll({
    *     outer:    '#architecture',
    *     track:    '#hScrollTrack',
    *     progress: '#hProgress',
@@ -435,7 +435,7 @@
     var progressEl = progress ? qs(progress) : null;
 
     if (!outerEl || !trackEl) {
-      console.warn('[VoltaUI] setupHorizontalScroll: missing elements for', outer);
+      console.warn('[SSCUI] setupHorizontalScroll: missing elements for', outer);
       return null;
     }
 
@@ -498,10 +498,10 @@
    *
    * @example
    *   // Default — targets all .reveal elements
-   *   VoltaUI.initScrollReveal();
+   *   SSCUI.initScrollReveal();
    *
    *   // Custom selector + threshold
-   *   VoltaUI.initScrollReveal('.fade-in', { threshold: 0.3 });
+   *   SSCUI.initScrollReveal('.fade-in', { threshold: 0.3 });
    */
   function initScrollReveal(selector, opts) {
     // Simple fade-up effect for .reveal, .reveal-img, .reveal-title (no stagger/3D)
@@ -553,7 +553,7 @@
    * @param {string} [activeClass='scrolled'] - Class to toggle.
    *
    * @example
-   *   VoltaUI.initNavbarScroll('mainNav', 60);
+   *   SSCUI.initNavbarScroll('mainNav', 60);
    */
   function initNavbarScroll(navbarId, threshold, activeClass) {
     navbarId    = navbarId    || 'navbar';
@@ -589,10 +589,10 @@
    * @param {object} [cfg.hoverStyles]              - Inline style overrides on hover.
    *
    * @example
-   *   VoltaUI.initCustomCursor();
+   *   SSCUI.initCustomCursor();
    *
    *   // Custom lerp speed and interactive elements
-   *   VoltaUI.initCustomCursor({ lerpFactor: 0.08, hoverSelector: 'a, button, [data-cursor]' });
+   *   SSCUI.initCustomCursor({ lerpFactor: 0.08, hoverSelector: 'a, button, [data-cursor]' });
    */
   function initCustomCursor(cfg) {
     cfg = cfg || {};
@@ -605,7 +605,7 @@
     var follower = document.getElementById(followerId);
 
     if (!cursor || !follower) {
-      console.warn('[VoltaUI] initCustomCursor: cursor elements not found');
+      console.warn('[SSCUI] initCustomCursor: cursor elements not found');
       return;
     }
 
@@ -670,7 +670,7 @@
    * @param {string} [cfg.end='bottom top']  - ScrollTrigger end marker.
    *
    * @example
-   *   VoltaUI.initParallax({ trigger: '#hero', image: '#heroImg', offset: 100 });
+   *   SSCUI.initParallax({ trigger: '#hero', image: '#heroImg', offset: 100 });
    */
   function initParallax(cfg) {
     if (!cfg || !cfg.trigger || !cfg.image) return;
@@ -709,8 +709,8 @@
    * @param {string} [selector='a[href^="#"]'] - CSS selector for anchor links.
    *
    * @example
-   *   VoltaUI.initAnchorScroll();                    // default
-   *   VoltaUI.initAnchorScroll('.nav a[href^="#"]'); // scoped to nav only
+   *   SSCUI.initAnchorScroll();                    // default
+   *   SSCUI.initAnchorScroll('.nav a[href^="#"]'); // scoped to nav only
    */
   function initAnchorScroll(selector) {
     selector = selector || 'a[href^="#"]';
@@ -757,10 +757,10 @@
    * @param {string} [cfg.image='#heroImg']             - Selector for the hero image.
    *
    * @example
-   *   VoltaUI.initHeroAnimation();
+   *   SSCUI.initHeroAnimation();
    *
    *   // Customise selectors for different markup
-   *   VoltaUI.initHeroAnimation({
+   *   SSCUI.initHeroAnimation({
    *     heading:  '.hero__title',
    *     subtitle: '.hero__copy',
    *     cta:      '.hero__cta',
@@ -837,10 +837,10 @@
    *
    * @example
    *   // Simple client-side feedback only
-   *   VoltaUI.initFormSubmit('form');
+   *   SSCUI.initFormSubmit('form');
    *
    *   // With a real API call
-   *   VoltaUI.initFormSubmit('form', {
+   *   SSCUI.initFormSubmit('form', {
    *     onSubmit: async (data) => {
    *       await fetch('/api/contact', { method: 'POST', body: data });
    *     }
@@ -886,7 +886,7 @@
       if (typeof onSubmit === 'function') {
         // If caller provides an async handler, show success when it resolves
         Promise.resolve(onSubmit(data)).then(showSuccess).catch(function (err) {
-          console.error('[VoltaUI] Form submit error:', err);
+          console.error('[SSCUI] Form submit error:', err);
         });
       } else {
         showSuccess();
@@ -919,7 +919,7 @@
    * @param {number}   [debounceMs=200] - Debounce delay in milliseconds.
    *
    * @example
-   *   VoltaUI.initResizeRefresh(['#architecture', '#amenities']);
+   *   SSCUI.initResizeRefresh(['#architecture', '#amenities']);
    */
   /* =========================================================
      10. SCROLL GALLERY
@@ -1112,10 +1112,10 @@
    *
    * @example
    *   // Simplest usage — everything uses defaults
-   *   VoltaUI.init();
+   *   SSCUI.init();
    *
    *   // With custom overrides
-   *   VoltaUI.init({
+   *   SSCUI.init({
    *     navbar: { id: 'site-header', threshold: 50 },
    *     formSubmit: { selector: '#contactForm' },
    *   });
@@ -1131,7 +1131,7 @@
       initLenis(cfg.lenis);
     }
 
-    // 1c. Sticky narrative section (VOLTA SKAI)
+    // 1c. Sticky narrative section (SSC Sharjah Sustainable City)
     if (cfg.stickyNarrative !== false) {
       initStickyNarrative(cfg.stickyNarrative);
     }
@@ -1186,13 +1186,13 @@
   /* =========================================================
      PUBLIC NAMESPACE EXPORT
      =========================================================
-     All functions are available on `window.VoltaUI`.
+     All functions are available on `window.SSCUI`.
      If you use a bundler (Webpack, Vite, Rollup) you can
      replace this block with ES module exports instead:
 
        export { initGSAP, setupHorizontalScroll, ... };
      ========================================================= */
-  global.VoltaUI = {
+  global.SSCUI = {
     initGSAP:               initGSAP,
     initLenis:              initLenis,
     initStickyNarrative:    initStickyNarrative,
@@ -1216,10 +1216,10 @@
 /* =========================================================
    AUTO-INIT
    =========================================================
-   Calls VoltaUI.init() once the DOM is ready.
+   Calls SSCUI.init() once the DOM is ready.
    Remove or comment out this block if you want to call
    init() manually with custom config from another script.
    ========================================================= */
 document.addEventListener('DOMContentLoaded', function () {
-  VoltaUI.init();
+  SSCUI.init();
 });

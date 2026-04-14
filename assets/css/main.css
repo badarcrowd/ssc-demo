@@ -1,7 +1,7 @@
 /**
  * main.css
  * =========================================================
- * Global stylesheet for the Volta SKAI luxury property site.
+ * Global stylesheet for the SSC Sharjah Sustainable City luxury property site.
  *
  * Sections:
  *   1.  Base Reset & Defaults
@@ -589,7 +589,7 @@ nav.scrolled::before {
    GSAP (initTilt3D) drives the rotation via quickTo.
 
    Reuse: copy the .tilt3d-stage + .tilt3d-card markup into
-   any page and call VoltaUI.initTilt3D() with the relevant
+   any page and call SSCUI.initTilt3D() with the relevant
    card + glare selectors.
    ========================================================= */
 
