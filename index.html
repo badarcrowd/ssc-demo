@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sharjah Sustainable City — Homes for a Greener Tomorrow</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Tailwind config — must come after the CDN script -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['Cormorant Garamond', 'serif'],
+            sans:  ['Inter', 'sans-serif'],
+          },
+          colors: {
+            gold:         '#C9A96E',
+            'gold-light': '#E2C99A',
+            dark:         '#0A0A0A',
+            'dark-2':     '#111111',
+            'dark-3':     '#1A1A1A',
+            'warm-white': '#F5F0E8',
+          },
+          letterSpacing: {
+            widest2: '0.3em',
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- GSAP + ScrollTrigger for section-lock & horizontal scroll -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <!-- Lenis — free smooth-scroll library, synced with GSAP ScrollTrigger -->
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.15/dist/lenis.min.js"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Site stylesheet -->
+  <link rel="stylesheet" href="assets/css/main.css" />
+</head>
+<body>
+
+  <!-- Custom Cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-follower" id="cursorFollower"></div>
+
+
+  <!-- ==========================================
+       NAVIGATION
+  =========================================== -->
+  <nav id="navbar" class="transition-all duration-500">
+    <a href="#" class="relative z-10 flex items-center gap-3 no-underline">
+      <div class="w-8 h-8 border border-gold flex items-center justify-center bg-white/10">
+        <span class="text-gold text-xs font-bold tracking-widest">SSC</span>
+      </div>
+      <div>
+        <p class="text-warm-white text-xs font-bold tracking-widest2 uppercase leading-none">Sharjah</p>
+        <p class="text-gold text-xs font-bold tracking-widest uppercase leading-none">Sustainable City</p>
+      </div>
+    </a>
+    <div class="relative z-10 flex items-center gap-8">
+      <a href="#architecture" class="text-warm-white/60 text-xs tracking-widest uppercase hover:text-gold transition-colors duration-300 hidden md:block">Architecture</a>
+      <a href="#amenities" class="text-warm-white/60 text-xs tracking-widest uppercase hover:text-gold transition-colors duration-300 hidden md:block">Amenities</a>
+      <a href="#location" class="text-warm-white/60 text-xs tracking-widest uppercase hover:text-gold transition-colors duration-300 hidden md:block">Location</a>
+      <a href="#contact" class="btn-gold text-xs"><span>Contact Us</span></a>
+    </div>
+  </nav>
+
+  <!-- ==========================================
+       HERO SECTION
+  =========================================== -->
+  <section class="hero-section" id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+
+    <!-- Full-screen video background -->
+    <div class="hero-video-container">
+      <video
+        id="heroImg"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto"
+      >
+        <source src="assets/video/beeah-video.mp4" type="video/mp4" />
+      </video>
+    </div>
+
+    <div class="relative z-10 text-center px-6 md:px-12 max-w-3xl mx-auto">
+      <p class="section-label reveal">Sharjah · UAE</p>
+      <h1 class="font-serif font-light leading-none reveal reveal-delay-1"
+          style="font-size: clamp(2.2rem, 5vw, 5rem); letter-spacing: -0.02em;">
+        SUSTAINABLE<br />
+        <em class="text-gold/80">LIVING FOR</em><br />
+        <span class="text-warm-white/90">A GREENER</span><br />
+        <span style="color: #C9A96E;">TOMORROW</span>
+      </h1>
+      <div class="divider reveal reveal-delay-2 mx-auto"></div>
+      <p class="section-subtitle reveal reveal-delay-2">
+        Eco-friendly homes in the heart of Sharjah,<br />where community and nature thrive together.
+      </p>
+      <div class="mt-10 flex gap-4 items-center justify-center reveal reveal-delay-3">
+        <a href="#architecture" class="btn-gold"><span>Explore</span><span class="arrow">→</span></a>
+        <a href="#contact" class="text-warm-white/50 text-xs tracking-widest uppercase hover:text-gold transition-colors">Book a Tour</a>
+      </div>
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator">
+      <span class="text-xs tracking-widest uppercase" style="writing-mode: vertical-rl; transform: rotate(180deg);">Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+
+    <!-- Floor counter -->
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 text-center z-10 hidden md:block">
+      <span class="text-gold text-5xl font-serif font-light leading-none">28</span>
+      <span class="text-gold/40 text-xs tracking-widest uppercase block mt-1">Floors</span>
+    </div>
+  </section>
+
+
+  <!-- ==========================================
+       SECTION 2: ABOUT / STATS  (vertical)
+  =========================================== -->
+    <!-- ==========================================
+      SECTION 2: SHARJAH SUSTAINABLE CITY — Sticky Narrative
+      Left panel sticks at 100vh; right images scroll
+      normally. Caption + counter update per image.
+    =========================================== -->
+  <section id="about" class="sn-section bg-dark-2">
+    <div class="sn-layout">
+
+      <!-- LEFT: sticky panel -->
+      <div class="sn-left" id="snLeft">
+        <!-- Top block: always visible -->
+        <div class="sn-left-top">
+          <p class="section-label">Sharjah Sustainable City</p>
+          <h2 class="section-title mt-4">
+            A new vision<br>for sustainable<br><em class="text-gold">urban living</em>
+          </h2>
+          <div class="divider"></div>
+          <p class="section-body">
+            Sharjah Sustainable City is a pioneering community designed for a brighter, greener future.<br>
+            Experience innovative architecture, renewable energy, and a lifestyle in harmony with nature.
+          </p>
+        </div>
+
+        <!-- Bottom block: counter + changing caption -->
+        <div class="sn-left-bottom">
+          <div class="sn-counter">
+            <span class="sn-counter-current" id="snCurrent">1</span>
+            <span class="sn-counter-sep">/</span>
+            <span class="sn-counter-total" id="snTotal">4</span>
+          </div>
+          <p class="sn-caption" id="snCaption">Award-winning sustainable design for a better tomorrow</p>
+        </div>
+      </div>
+
+      <!-- RIGHT: scrolling full-height image panels -->
+      <div class="sn-right">
+
+        <div class="sn-image-item"
+             data-index="0"
+             data-caption="Award-winning sustainable design for a better tomorrow">
+          <img
+            src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1200&q=85&auto=format&fit=crop"
+            alt="Sustainable architecture"
+            class="sn-img"
+          />
+          <div class="sn-img-overlay"></div>
+        </div>
+
+        <div class="sn-image-item"
+             data-index="1"
+             data-caption="Panoramic green spaces and community gardens for all residents">
+          <img
+            src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=1200&q=85&auto=format&fit=crop"
+            alt="Community gardens"
+            class="sn-img"
+          />
+          <div class="sn-img-overlay"></div>
+        </div>
+
+        <div class="sn-image-item"
+             data-index="2"
+             data-caption="Bright, energy-efficient homes with modern open layouts">
+          <img
+            src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1200&q=85&auto=format&fit=crop"
+            alt="Energy-efficient home interior"
+            class="sn-img"
+          />
+          <div class="sn-img-overlay"></div>
+        </div>
+
+        <div class="sn-image-item"
+             data-index="3"
+             data-caption="A vibrant community built for families, wellness, and the environment">
+          <img
+            src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&q=85&auto=format&fit=crop"
+            alt="Family-friendly community"
+            class="sn-img"
+          />
+          <div class="sn-img-overlay"></div>
+        </div>
+
+      </div><!-- /sn-right -->
+    </div><!-- /sn-layout -->
+  </section>
+
+
+  <!-- ==========================================
+       SECTION 3: HORIZONTAL SCROLL (Architecture Slides)
+       Uses GSAP ScrollTrigger pin + horizontal tween
+  =========================================== -->
+  <div class="h-scroll-outer" id="architecture">
+    <div class="h-scroll-pin-wrapper" id="hScrollPinWrapper">
+      <div class="h-scroll-track" id="hScrollTrack">
+
+        <!-- Slide 1: Architecture Intro -->
+        <div class="h-slide bg-dark flex items-center">
+          <div class="absolute inset-0">
+            <img
+              src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1400&q=80&auto=format&fit=crop"
+              alt="Architecture"
+              class="w-full h-full object-cover opacity-30"
+            />
+            <div class="absolute inset-0 bg-gradient-to-r from-dark via-dark/60 to-transparent"></div>
+          </div>
+          <div class="relative z-10 px-20 max-w-xl">
+            <p class="section-label">Design</p>
+            <h2 class="section-title mb-6">
+              Iconic<br /><em class="text-gold">eco-architecture</em>
+            </h2>
+            <div class="divider"></div>
+            <p class="section-body">
+              Designed as a model for sustainable urban development,
+              the city blends innovative design with environmental responsibility.
+            </p>
+          </div>
+          <!-- slide counter -->
+          <div class="absolute bottom-12 left-20">
+            <span class="text-gold/40 font-serif text-7xl font-light">01</span>
+          </div>
+        </div>
+
+        <!-- Slide 2: Facade Detail -->
+        <div class="h-slide bg-dark-3 flex items-center justify-end">
+          <div class="absolute inset-0">
+            <img
+              src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=1400&q=80&auto=format&fit=crop"
+              alt="Facade"
+              class="w-full h-full object-cover opacity-25"
+            />
+            <div class="absolute inset-0 bg-gradient-to-l from-dark via-dark/60 to-transparent"></div>
+          </div>
+          <div class="relative z-10 px-20 max-w-xl text-right">
+            <p class="section-label">Facade</p>
+            <h2 class="section-title mb-6">
+              Solar<br /><em class="text-gold">panels</em>
+            </h2>
+            <div class="divider ml-auto"></div>
+            <p class="section-body ml-auto text-right">
+              Rooftop solar panels and smart energy systems power every home,
+              reducing your carbon footprint and utility bills.
+            </p>
+          </div>
+          <div class="absolute bottom-12 right-20">
+            <span class="text-gold/40 font-serif text-7xl font-light">02</span>
+          </div>
+        </div>
+
+        <!-- Slide 3: Views -->
+        <div class="h-slide bg-dark flex items-center">
+          <div class="absolute inset-0">
+            <img
+              src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1400&q=80&auto=format&fit=crop"
+              alt="Views"
+              class="w-full h-full object-cover opacity-30"
+            />
+            <div class="absolute inset-0 bg-gradient-to-r from-dark via-dark/70 to-transparent"></div>
+          </div>
+          <div class="relative z-10 px-20 max-w-xl">
+            <p class="section-label">Nature</p>
+            <h2 class="section-title mb-6">
+              Expansive<br /><em class="text-gold">green</em><br />spaces
+            </h2>
+            <div class="divider"></div>
+            <p class="section-body">
+              Enjoy lush parks, walking trails, and community gardens
+              designed to connect you with nature every day.
+            </p>
+          </div>
+          <div class="absolute bottom-12 left-20">
+            <span class="text-gold/40 font-serif text-7xl font-light">03</span>
+          </div>
+        </div>
+
+        <!-- Slide 4: Interior -->
+        <div class="h-slide bg-dark-3 flex items-center justify-center">
+          <div class="absolute inset-0">
+            <img
+              src="https://images.unsplash.com/photo-1600607687939-ce8a6b3c6b1e?w=1400&q=80&auto=format&fit=crop"
+              alt="Interior"
+              class="w-full h-full object-cover opacity-25"
+            />
+            <div class="absolute inset-0 bg-dark/60"></div>
+          </div>
+          <div class="relative z-10 text-center max-w-2xl px-8">
+            <p class="section-label text-center">Homes</p>
+            <h2 class="section-title mb-6 text-center">
+              Spacious &amp;<br /><em class="text-gold">energy-smart</em><br />living
+            </h2>
+            <div class="divider mx-auto"></div>
+            <p class="section-body mx-auto text-center">
+              Every residence is designed for comfort, efficiency, and a healthy lifestyle.
+            </p>
+            <div class="mt-10">
+              <a href="#contact" class="btn-gold"><span>Explore Homes</span><span class="arrow">→</span></a>
+            </div>
+          </div>
+          <div class="absolute bottom-12 right-20">
+            <span class="text-gold/40 font-serif text-7xl font-light">04</span>
+          </div>
+        </div>
+
+      </div><!-- /h-scroll-track -->
+
+      <!-- Slide progress dots -->
+      <div class="h-progress" id="hProgress">
+        <div class="h-dot active" data-index="0"></div>
+        <div class="h-dot" data-index="1"></div>
+        <div class="h-dot" data-index="2"></div>
+        <div class="h-dot" data-index="3"></div>
+      </div>
+
+      <!-- Horizontal scroll label -->
+      <div class="absolute top-1/2 right-10 -translate-y-1/2 flex flex-col items-center gap-3 z-20 hidden md:flex">
+        <span class="text-gold/40 text-xs tracking-widest uppercase" style="writing-mode: vertical-lr;">Scroll to explore</span>
+        <div class="w-px h-16 bg-gradient-to-b from-gold/40 to-transparent"></div>
+      </div>
+
+    </div><!-- /h-scroll-pin-wrapper -->
+  </div><!-- /h-scroll-outer -->
+
+
+  <!-- ==========================================
+       SECTION 4: CONSTRUCTION TIMELINE  (vertical)
+  =========================================== -->
+  <section class="section bg-dark flex items-center py-28" id="timeline">
+    <div class="w-full px-12 md:px-20 max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-24">
+
+        <div>
+          <p class="section-label reveal">Progress</p>
+          <h2 class="section-title reveal reveal-delay-1">
+            Construction<br /><em class="text-gold">Timeline</em>
+          </h2>
+          <div class="divider reveal reveal-delay-2"></div>
+          <p class="section-body reveal reveal-delay-2">
+            A living environment that is being created step by step,
+            with every milestone bringing the vision closer to reality.
+          </p>
+        </div>
+
+        <div class="space-y-0">
+          <div class="timeline-item pb-10 reveal reveal-delay-1">
+            <span class="text-gold text-xs tracking-widest uppercase">November 2025</span>
+            <p class="font-serif text-2xl font-light text-warm-white mt-1">Start of Construction</p>
+            <p class="text-warm-white/40 text-sm mt-2 font-light">Ground-breaking ceremony marks the beginning of a new era for Tallinn's skyline.</p>
+          </div>
+          <div class="timeline-item pb-10 reveal reveal-delay-2" style="--active: 1">
+            <span class="text-gold text-xs tracking-widest uppercase">April 2026</span>
+            <p class="font-serif text-2xl font-light text-warm-white mt-1">Cornerstone</p>
+            <div class="inline-flex items-center gap-2 mt-2">
+              <span class="w-2 h-2 rounded-full bg-gold animate-pulse"></span>
+              <span class="text-gold text-xs tracking-widest uppercase">In Progress</span>
+            </div>
+          </div>
+          <div class="timeline-item pb-10 reveal reveal-delay-2">
+            <span class="text-warm-white/30 text-xs tracking-widest uppercase">November 2026</span>
+            <p class="font-serif text-2xl font-light text-warm-white/40 mt-1">Topping Out</p>
+          </div>
+          <div class="timeline-item reveal reveal-delay-3">
+            <span class="text-warm-white/30 text-xs tracking-widest uppercase">June 2027</span>
+            <p class="font-serif text-2xl font-light text-warm-white/40 mt-1">Move-In Ready</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ==========================================
+       SECTION 4b: 3D TILT IMAGE — "A seamless dialogue"
+       Mouse-move rotates the card in 3D perspective.
+       GSAP handles the tilt on mousemove via initTilt3D().
+  =========================================== -->
+  <section class="tilt3d-section bg-dark" id="dialogue">
+    <div class="tilt3d-inner">
+
+      <!-- Left: text -->
+      <div class="tilt3d-text">
+        <p class="section-label reveal">Architecture</p>
+        <h2 class="section-title reveal reveal-delay-1">
+          A seamless dialogue<br><em class="text-gold">between indoors</em><br>and infinity
+        </h2>
+        <div class="divider reveal reveal-delay-2"></div>
+        <p class="section-body reveal reveal-delay-2">
+          The modern exterior architecture is defined by expansive glass surfaces, shaping
+          a light, sculptural presence on the skyline. Striking curved glass corner
+          balconies introduce a sense of movement and continuity, extending the living
+          spaces outward and dissolving the boundary between interior and open air.
+        </p>
+        <p class="section-body reveal reveal-delay-3 mt-5">
+          Panoramic corner windows and soaring glass surfaces make the horizon a natural
+          continuation of the interior, inviting daylight to move freely through the
+          rooms by day and framing the city's glow after dusk.
+        </p>
+      </div>
+
+      <!-- Right: 3D tilt card -->
+      <div class="tilt3d-stage" id="tiltStage">
+        <div class="tilt3d-card" id="tiltCard">
+          <img
+            src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1400&q=90&auto=format&fit=crop"
+            alt="Volta SKAI exterior"
+            class="tilt3d-img"
+            id="tiltImg"
+          />
+          <!-- Inner highlight that shifts opposite to tilt — depth illusion -->
+          <div class="tilt3d-glare" id="tiltGlare"></div>
+          <!-- Floating caption badge -->
+          <div class="tilt3d-badge">
+            <span class="tilt3d-badge-label">Exterior</span>
+            <span class="tilt3d-badge-value">Volta SKAI</span>
+          </div>
+        </div>
+        <!-- Shadow element that follows card in opposite direction -->
+        <div class="tilt3d-shadow" id="tiltShadow"></div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ==========================================
+       SECTION 5: AMENITIES – Horizontal Scroll #2
+  =========================================== -->
+  <div class="h-scroll-outer" id="amenities">
+    <div class="h-scroll-pin-wrapper" id="hScrollPinWrapper2">
+      <div class="h-scroll-track" id="hScrollTrack2">
+
+        <!-- Slide A: Amenities Intro -->
+        <div class="h-slide bg-dark-2 flex items-center">
+          <div class="absolute inset-0">
+            <img
+              src="https://images.unsplash.com/photo-1571055107559-3e67626fa8be?w=1400&q=80&auto=format&fit=crop"
+              alt="Rooftop"
+              class="w-full h-full object-cover opacity-20"
+            />
+            <div class="absolute inset-0 bg-gradient-to-r from-dark-2 to-transparent"></div>
+          </div>
+          <div class="relative z-10 px-20 max-w-xl">
+            <p class="section-label">Amenities</p>
+            <h2 class="section-title mb-6">
+              Sustainable<br /><em class="text-gold">comfort</em><br />for all
+            </h2>
+            <div class="divider"></div>
+            <p class="section-body">
+              Sharjah Sustainable City is designed for effortless living — powered by clean energy,
+              with smart systems, green spaces, and a vibrant community.
+            </p>
+          </div>
+          <div class="absolute bottom-12 left-20 text-gold/40 font-serif text-7xl font-light">A</div>
+        </div>
+
+        <!-- Slide B: Smart Home -->
+        <div class="h-slide bg-dark-3 flex items-center justify-center">
+          <div class="absolute inset-0">
+            <img
+              src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1400&q=80&auto=format&fit=crop"
+              alt="Smart Home"
+              class="w-full h-full object-cover opacity-15"
+            />
+            <div class="absolute inset-0 bg-dark-3/70"></div>
+          </div>
+          <div class="relative z-10 max-w-4xl px-12 w-full">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div class="feature-card p-8">
+                <div class="w-10 h-10 border border-gold/30 flex items-center justify-center mb-6">
+                  <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                </div>
+                <h3 class="font-serif text-xl font-light mb-3">Keyless Entry</h3>
+                <p class="text-warm-white/40 text-sm font-light leading-relaxed">Intelligent access systems allow keyless entry throughout the building.</p>
+              </div>
+              <div class="feature-card p-8">
+                <div class="w-10 h-10 border border-gold/30 flex items-center justify-center mb-6">
+                  <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                </div>
+                <h3 class="font-serif text-xl font-light mb-3">Spacious Lifts</h3>
+                <p class="text-warm-white/40 text-sm font-light leading-relaxed">Direct access between your home, parking, and lobbies with quiet precision.</p>
+              </div>
+              <div class="feature-card p-8">
+                <div class="w-10 h-10 border border-gold/30 flex items-center justify-center mb-6">
+                  <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+                </div>
+                <h3 class="font-serif text-xl font-light mb-3">Design Lobby</h3>
+                <p class="text-warm-white/40 text-sm font-light leading-relaxed">Double-height lobby — a calm, refined threshold between city life and home.</p>
+              </div>
+            </div>
+          </div>
+          <div class="absolute bottom-12 right-20 text-gold/40 font-serif text-7xl font-light">B</div>
+        </div>
+
+        <!-- Slide C: Rooftop Park -->
+        <div class="h-slide bg-dark flex items-center justify-end">
+          <div class="absolute inset-0">
+            <img
+              src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=1400&q=80&auto=format&fit=crop"
+              alt="Rooftop Park"
+              class="w-full h-full object-cover opacity-30"
+            />
+            <div class="absolute inset-0 bg-gradient-to-l from-dark via-dark/70 to-transparent"></div>
+          </div>
+          <div class="relative z-10 px-20 max-w-xl text-right">
+            <p class="section-label">Outdoor</p>
+            <h2 class="section-title mb-6">
+              Elevated<br /><em class="text-gold">rooftop</em><br />park
+            </h2>
+            <div class="divider ml-auto"></div>
+            <p class="section-body ml-auto text-right">
+              A serene retreat above the city, where moments of calm unfold
+              in the fresh sea air. With readiness for a hot tub on penthouses
+              of up to 300 m² terrace.
+            </p>
+          </div>
+          <div class="absolute bottom-12 right-20 text-gold/40 font-serif text-7xl font-light">C</div>
+        </div>
+
+        <!-- Slide D: Parking -->
+        <div class="h-slide bg-dark-2 flex items-center">
+          <div class="absolute inset-0">
+            <img
+              src="https://images.unsplash.com/photo-1470224114660-3f6686c562eb?w=1400&q=80&auto=format&fit=crop"
+              alt="Parking"
+              class="w-full h-full object-cover opacity-20"
+            />
+            <div class="absolute inset-0 bg-gradient-to-r from-dark-2 to-transparent"></div>
+          </div>
+          <div class="relative z-10 px-20 max-w-xl">
+            <p class="section-label">Comfort</p>
+            <h2 class="section-title mb-6">
+              Multi-level<br /><em class="text-gold">underground</em><br />parking
+            </h2>
+            <div class="divider"></div>
+            <p class="section-body mb-10">
+              A multi-level, heated underground parking facility adds both comfort
+              and convenience to the everyday journey for you and your guests.
+            </p>
+            <a href="#contact" class="btn-gold"><span>Book a Meeting</span><span class="arrow">→</span></a>
+          </div>
+          <div class="absolute bottom-12 left-20 text-gold/40 font-serif text-7xl font-light">D</div>
+        </div>
+
+      </div><!-- /h-scroll-track2 -->
+
+      <!-- Slide progress dots -->
+      <div class="h-progress" id="hProgress2">
+        <div class="h-dot active" data-index="0"></div>
+        <div class="h-dot" data-index="1"></div>
+        <div class="h-dot" data-index="2"></div>
+        <div class="h-dot" data-index="3"></div>
+      </div>
+
+    </div><!-- /hScrollPinWrapper2 -->
+  </div><!-- /amenities -->
+
+
+  <!-- ==========================================
+       SECTION 5b: SCROLL GALLERY
+       Collage of 5 images — pinned by GSAP ScrollTrigger.
+       On scroll: 4 corner images scatter outward, center
+       image zooms to fill the full viewport.
+       After the animation completes, normal scroll resumes.
+  =========================================== -->
+  <section class="sgallery-section bg-dark" id="sgallery">
+    <!-- This inner div gets pinned at 100vh while the section
+         provides ~300vh of scroll travel for the animation. -->
+    <div class="sg-viewport" id="sgViewport">
+
+      <!-- Header — fades out as zoom begins -->
+     <div class="sg-header" id="sgHeader">
+
+      </div>
+
+      <!-- 3-column × 2-row grid: corners + tall center -->
+      <div class="sg-grid">
+        <div class="sg-cell sg-corner sg-tl">
+          <img
+            src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80&auto=format&fit=crop"
+            alt="Interior detail"
+          />
+        </div>
+
+        <!-- CENTER — gets zoomed to fullscreen -->
+        <div class="sg-cell sg-center" id="sgCenter">
+          <img
+            src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1400&q=85&auto=format&fit=crop"
+            alt="Living space"
+          />
+        </div>
+
+        <div class="sg-cell sg-corner sg-tr">
+          <img
+            src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80&auto=format&fit=crop"
+            alt="Exterior view"
+          />
+        </div>
+        <div class="sg-cell sg-corner sg-bl">
+          <img
+            src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&q=80&auto=format&fit=crop"
+            alt="Bathroom"
+          />
+        </div>
+        <div class="sg-cell sg-corner sg-br">
+          <img
+            src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&q=80&auto=format&fit=crop"
+            alt="Bedroom"
+          />
+        </div>
+      </div>
+
+      <!-- Overlay text — revealed when center fills viewport -->
+      <div class="sg-overlay-text" id="sgOverlayText">
+        <p class="section-label mb-4">Interior</p>
+        <h2 class="section-title">Crafted for<br><em class="text-gold">remarkable living</em></h2>
+        <div class="divider"></div>
+        <a href="#contact" class="btn-gold" style="width:fit-content; margin-top:2rem;">
+          <span>Book a Viewing</span>
+          <span class="arrow">→</span>
+        </a>
+      </div>
+
+    </div><!-- /sg-viewport -->
+  </section>
+
+
+  <!-- ==========================================
+       SECTION 6: SKAI VILLAS  (vertical)
+  =========================================== -->
+  <section class="section bg-dark-2 py-28" id="villas">
+    <div class="w-full px-12 md:px-20 max-w-7xl mx-auto">
+      <div class="text-center mb-20">
+        <p class="section-label reveal text-center">Exclusive</p>
+        <h2 class="section-title reveal reveal-delay-1 text-center">
+          SKAI <em class="text-gold">Villas</em>
+        </h2>
+        <div class="divider mx-auto reveal reveal-delay-2"></div>
+        <p class="section-subtitle reveal reveal-delay-2 max-w-2xl mx-auto">
+          An exclusive collection of unique homes designed to suit your lifestyle
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="reveal reveal-delay-1">
+          <div class="img-placeholder aspect-[3/4] mb-4 overflow-hidden">
+            <img
+              src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?w=600&q=80&auto=format&fit=crop"
+              alt="Panoramic Views"
+              class="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+            />
+          </div>
+          <p class="text-gold text-xs tracking-widest uppercase mb-2">01</p>
+          <h3 class="font-serif text-xl font-light mb-2">Panoramic Views</h3>
+          <p class="text-warm-white/40 text-sm font-light">Views of the sea, Old Town, and the city from sunrise to sunset.</p>
+        </div>
+
+        <div class="reveal reveal-delay-2 md:mt-12">
+          <div class="img-placeholder aspect-[3/4] mb-4 overflow-hidden">
+            <img
+              src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80&auto=format&fit=crop"
+              alt="Bespoke Interior"
+              class="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+            />
+          </div>
+          <p class="text-gold text-xs tracking-widest uppercase mb-2">02</p>
+          <h3 class="font-serif text-xl font-light mb-2">Bespoke Interior</h3>
+          <p class="text-warm-white/40 text-sm font-light">Layout and finishes tailored specifically to your lifestyle.</p>
+        </div>
+
+        <div class="reveal reveal-delay-2">
+          <div class="img-placeholder aspect-[3/4] mb-4 overflow-hidden">
+            <img
+              src="https://images.unsplash.com/photo-1613977257363-707ba9348227?w=600&q=80&auto=format&fit=crop"
+              alt="Smart Systems"
+              class="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+            />
+          </div>
+          <p class="text-gold text-xs tracking-widest uppercase mb-2">03</p>
+          <h3 class="font-serif text-xl font-light mb-2">Top-tier Systems</h3>
+          <p class="text-warm-white/40 text-sm font-light">Smart home, integrated cooling, humidity-controlled ventilation.</p>
+        </div>
+
+        <div class="reveal reveal-delay-3 md:mt-12">
+          <div class="img-placeholder aspect-[3/4] mb-4 overflow-hidden">
+            <img
+              src="https://images.unsplash.com/photo-1530267981375-f0de937f5f13?w=600&q=80&auto=format&fit=crop"
+              alt="Rooftop Terrace"
+              class="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+            />
+          </div>
+          <p class="text-gold text-xs tracking-widest uppercase mb-2">04</p>
+          <h3 class="font-serif text-xl font-light mb-2">Rooftop Terraces</h3>
+          <p class="text-warm-white/40 text-sm font-light">Up to 300 m² private terrace with readiness for a hot tub.</p>
+        </div>
+      </div>
+
+      <div class="text-center mt-16 reveal">
+        <a href="#contact" class="btn-gold"><span>Read More about SKAI Villas</span><span class="arrow">→</span></a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ==========================================
+       SECTION 7: LOCATION (Volta Quarter) – vertical
+  =========================================== -->
+  <section class="section bg-dark py-28" id="location">
+    <div class="w-full px-12 md:px-20 max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+
+        <div>
+          <p class="section-label reveal">Location</p>
+          <h2 class="section-title reveal reveal-delay-1">
+            Volta<br /><em class="text-gold">Quarter</em>
+          </h2>
+          <div class="divider reveal reveal-delay-2"></div>
+          <p class="section-body reveal reveal-delay-2 mb-6">
+            The historic Volta Quarter has grown into one of Tallinn's most stylish
+            residential and business environments and the main hub of Northern Tallinn.
+          </p>
+          <p class="section-body reveal reveal-delay-3 mb-10">
+            Through the synergy of Volta, Krulli, and Noblessner quarters, Estonia's first
+            15-minute city is taking shape — bringing everything essential to modern life
+            within walking distance.
+          </p>
+          <div class="grid grid-cols-3 gap-4 mb-10">
+            <div class="text-center reveal reveal-delay-1">
+              <span class="text-gold font-serif text-3xl font-light block">15'</span>
+              <span class="text-warm-white/40 text-xs tracking-widest uppercase">City Centre</span>
+            </div>
+            <div class="text-center reveal reveal-delay-2">
+              <span class="text-gold font-serif text-3xl font-light block">5'</span>
+              <span class="text-warm-white/40 text-xs tracking-widest uppercase">Sea Walk</span>
+            </div>
+            <div class="text-center reveal reveal-delay-3">
+              <span class="text-gold font-serif text-3xl font-light block">2'</span>
+              <span class="text-warm-white/40 text-xs tracking-widest uppercase">Volta Park</span>
+            </div>
+          </div>
+          <a href="#contact" class="btn-gold reveal"><span>Discover Location</span><span class="arrow">→</span></a>
+        </div>
+
+        <!-- Map placeholder / aerial image -->
+        <div class="reveal reveal-delay-2">
+          <div class="img-placeholder aspect-square overflow-hidden relative">
+            <img
+              src="https://images.unsplash.com/photo-1539541417736-3d44c90da315?w=800&q=80&auto=format&fit=crop"
+              alt="Tallinn Skyline"
+              class="w-full h-full object-cover"
+            />
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-dark/60"></div>
+            <div class="absolute bottom-6 left-6">
+              <p class="text-gold text-xs tracking-widest uppercase mb-1">Tallinn, Estonia</p>
+              <p class="font-serif text-2xl font-light">Golden Mile</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ==========================================
+       SECTION 8: CONTACT / FOOTER
+  =========================================== -->
+  <section class="section bg-dark-2 py-28 min-h-0" id="contact">
+    <div class="w-full px-12 md:px-20 max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-20">
+
+        <!-- Contact Info -->
+        <div>
+          <p class="section-label reveal">Get in Touch</p>
+          <h2 class="section-title reveal reveal-delay-1">
+            Book a meeting<br /><em class="text-gold">with us</em>
+          </h2>
+          <div class="divider reveal reveal-delay-2"></div>
+          <p class="section-body reveal reveal-delay-2 mb-10">
+            At Volta SKAI, you will find a wide selection of unique residential and
+            commercial properties. Contact us and we will find the perfect solution for you.
+          </p>
+          <div class="space-y-4 reveal reveal-delay-3">
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 border border-gold/20 flex items-center justify-center flex-shrink-0">
+                <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+              </div>
+              <div>
+                <p class="text-warm-white/40 text-xs tracking-widest uppercase mb-1">Phone</p>
+                <a href="tel:+37257571010" class="text-warm-white hover:text-gold transition-colors font-light">+372 5757 1010</a>
+              </div>
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 border border-gold/20 flex items-center justify-center flex-shrink-0">
+                <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              </div>
+              <div>
+                <p class="text-warm-white/40 text-xs tracking-widest uppercase mb-1">Email</p>
+                <a href="mailto:voltaskai@endover.ee" class="text-warm-white hover:text-gold transition-colors font-light">voltaskai@endover.ee</a>
+              </div>
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 border border-gold/20 flex items-center justify-center flex-shrink-0">
+                <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              </div>
+              <div>
+                <p class="text-warm-white/40 text-xs tracking-widest uppercase mb-1">Address</p>
+                <p class="text-warm-white font-light">Volta Quarter, Tallinn, Estonia</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="reveal reveal-delay-2">
+          <form class="space-y-8" onsubmit="handleFormSubmit(event)">
+            <div class="grid grid-cols-2 gap-6">
+              <div>
+                <label class="text-warm-white/40 text-xs tracking-widest uppercase block mb-3">First Name</label>
+                <input type="text" placeholder="Your first name" class="contact-input" required />
+              </div>
+              <div>
+                <label class="text-warm-white/40 text-xs tracking-widest uppercase block mb-3">Last Name</label>
+                <input type="text" placeholder="Your last name" class="contact-input" required />
+              </div>
+            </div>
+            <div>
+              <label class="text-warm-white/40 text-xs tracking-widest uppercase block mb-3">Email</label>
+              <input type="email" placeholder="your@email.com" class="contact-input" required />
+            </div>
+            <div>
+              <label class="text-warm-white/40 text-xs tracking-widest uppercase block mb-3">Phone</label>
+              <input type="tel" placeholder="+372 ..." class="contact-input" />
+            </div>
+            <div>
+              <label class="text-warm-white/40 text-xs tracking-widest uppercase block mb-3">Message</label>
+              <textarea rows="3" placeholder="How can we help you?" class="contact-input resize-none"></textarea>
+            </div>
+            <button type="submit" class="btn-gold w-full justify-center">
+              <span>Send Message</span><span class="arrow">→</span>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Footer bottom -->
+      <div class="mt-20 pt-8 border-t border-warm-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 border border-gold/30 flex items-center justify-center">
+            <span class="text-gold text-xs">VS</span>
+          </div>
+          <span class="text-warm-white/30 text-xs font-light">© 2026 Volta SKAI · Endover</span>
+        </div>
+        <div class="flex gap-8">
+          <a href="#" class="text-warm-white/30 text-xs tracking-widest uppercase hover:text-gold transition-colors">Privacy</a>
+          <a href="#" class="text-warm-white/30 text-xs tracking-widest uppercase hover:text-gold transition-colors">Terms</a>
+          <a href="#" class="text-warm-white/30 text-xs tracking-widest uppercase hover:text-gold transition-colors">Cookies</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ==========================================
+       JAVASCRIPT — external module
+  =========================================== -->
+  <!-- Site behaviour (see assets/js/main.js for full documentation) -->
+
+  <!-- Site behaviour (auto-inits via DOMContentLoaded) -->
+  <script src="assets/js/main.js"></script>
+
+</body>
+</html>

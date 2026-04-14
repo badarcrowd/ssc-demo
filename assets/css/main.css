@@ -1,0 +1,967 @@
+/**
+ * main.css
+ * =========================================================
+ * Global stylesheet for the Volta SKAI luxury property site.
+ *
+ * Sections:
+ *   1.  Base Reset & Defaults
+ *   2.  Custom Cursor
+ *   3.  Navigation
+ *   4.  Hero Section
+ *   5.  Scroll Indicator
+ *   6.  Section Typography Utilities
+ *   7.  Horizontal Scroll Wrapper
+ *   8.  Feature Cards
+ *   9.  Timeline
+ *  10.  Image Placeholders
+ *  11.  Horizontal Scroll Progress Dots
+ *  12.  Navbar Scrolled State
+ *  13.  Gold Button
+ *  14.  Amenity Tab
+ *  15.  Scroll-Reveal Animation
+ *  16.  Contact Form Inputs
+ *  17.  Noise Overlay
+ *
+ * Reuse notes:
+ *   - All colour values reference CSS custom properties (--color-*)
+ *     defined in :root so you can theme a new project by changing
+ *     just the :root block.
+ *   - Component classes (.feature-card, .btn-gold, .reveal, etc.)
+ *     are self-contained and portable to any other HTML page.
+ * =========================================================
+ */
+
+
+/* =========================================================
+   0. CSS CUSTOM PROPERTIES  (theme tokens)
+   =========================================================
+   Override these in a new project to change the palette.
+   ========================================================= */
+:root {
+  --color-gold:         #C9A96E;
+  --color-gold-light:   #E2C99A;
+  --color-dark:         #0A0A0A;
+  --color-dark-2:       #111111;
+  --color-dark-3:       #1A1A1A;
+  --color-warm-white:   #F5F0E8;
+
+  --font-serif:  'Cormorant Garamond', serif;
+  --font-sans:   'Inter', sans-serif;
+
+  --transition-base: 0.3s ease;
+  --transition-slow: 0.8s ease;
+}
+
+
+/* =========================================================
+   1. BASE RESET & DEFAULTS
+   ========================================================= */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: auto; /* GSAP manages scroll behaviour */
+  overflow-x: hidden;
+}
+
+body {
+  background-color: var(--color-dark);
+  color: var(--color-warm-white);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  cursor: none; /* replaced by custom cursor */
+}
+
+/* =========================================================
+   2. CUSTOM CURSOR
+   =========================================================
+   Requires two elements in HTML:
+     <div class="cursor"          id="cursor"></div>
+     <div class="cursor-follower" id="cursorFollower"></div>
+   Animated via JS (initCustomCursor).
+   ========================================================= */
+.cursor {
+  width: 8px;
+  height: 8px;
+  background: var(--color-gold);
+  border-radius: 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s ease;
+}
+
+.cursor-follower {
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(201, 169, 110, 0.5);
+  border-radius: 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: transform 0.08s ease,
+              width 0.3s ease,
+              height 0.3s ease,
+              border-color 0.3s ease;
+}
+
+/* CSS-only fallback hover enlarge (JS overrides this dynamically) */
+a:hover ~ .cursor-follower,
+button:hover ~ .cursor-follower {
+  width: 60px;
+  height: 60px;
+}
+
+
+/* =========================================================
+   3. NAVIGATION
+   ========================================================= */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 2rem 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  mix-blend-mode: normal;
+}
+
+/* Gradient underlay — transparent-to-dark effect */
+nav::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(10, 10, 10, 0.8) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   4. HERO SECTION
+   ========================================================= */
+.hero-section {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 0;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #0A0A0A 0%, #1a1a2e 50%, #0A0A0A 100%);
+}
+
+/* Subtle grid pattern overlay */
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(201, 169, 110, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201, 169, 110, 0.03) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+
+.hero-video-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.hero-video-container video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Dark vignette so centred text stays readable */
+.hero-video-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.52);
+  z-index: 1;
+}
+
+/* Bottom fade — blends into the section below */
+.hero-video-container::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 45%;
+  background: linear-gradient(to top, #0A0A0A 0%, transparent 100%);
+  z-index: 1;
+}
+
+
+/* =========================================================
+   5. SCROLL INDICATOR
+   ========================================================= */
+.scroll-indicator {
+  position: absolute;
+  bottom: 2.5rem;
+  right: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(201, 169, 110, 0.7);
+}
+
+.scroll-line {
+  width: 1px;
+  height: 60px;
+  background: linear-gradient(to bottom, rgba(201, 169, 110, 0.7), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+@keyframes scrollPulse {
+  0%, 100% { transform: scaleY(1); opacity: 1; }
+  50%       { transform: scaleY(0.5); opacity: 0.4; }
+}
+
+
+/* =========================================================
+   6. SECTION TYPOGRAPHY UTILITIES
+   =========================================================
+   Reusable classes that define consistent type hierarchy.
+   ========================================================= */
+
+/* Full-height section container */
+.section {
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Small uppercase label above a heading */
+.section-label {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  margin-bottom: 1.25rem;
+}
+
+/* Primary display heading — fluid type scale */
+.section-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 300;
+  line-height: 1.1;
+  color: var(--color-warm-white);
+}
+
+/* Secondary italic sub-heading */
+.section-subtitle {
+  font-family: var(--font-serif);
+  font-size: clamp(1.25rem, 2.5vw, 2rem);
+  font-weight: 300;
+  font-style: italic;
+  color: rgba(245, 240, 232, 0.6);
+  line-height: 1.4;
+}
+
+/* Body copy with constrained measure */
+.section-body {
+  font-size: 0.9rem;
+  font-weight: 300;
+  line-height: 1.8;
+  color: rgba(245, 240, 232, 0.65);
+  max-width: 38ch;
+}
+
+/* Thin horizontal gold rule */
+.divider {
+  width: 40px;
+  height: 1px;
+  background: var(--color-gold);
+  margin: 2rem 0;
+}
+
+
+/* =========================================================
+   7. HORIZONTAL SCROLL WRAPPER
+   =========================================================
+   Structure required in HTML:
+     <div class="h-scroll-outer" id="sectionId">
+       <div class="h-scroll-pin-wrapper">
+         <div class="h-scroll-track" id="trackId">
+           <div class="h-slide"> … </div>
+           <div class="h-slide"> … </div>
+         </div>
+       </div>
+     </div>
+   The outer div's height is set dynamically by JS (setupHorizontalScroll).
+   ========================================================= */
+.h-scroll-outer {
+  position: relative;
+}
+
+/* Sticky viewport — the "window" that stays fixed while outer scrolls */
+.h-scroll-pin-wrapper {
+  position: sticky;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Flex row of full-viewport slides — translated by GSAP */
+.h-scroll-track {
+  display: flex;
+  width: max-content;
+  height: 100vh;
+  will-change: transform;
+}
+
+/* Individual full-viewport slide */
+.h-slide {
+  width: 100vw;
+  height: 100vh;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   8. FEATURE CARDS
+   =========================================================
+   Self-contained glass-morphism card.
+   Usage: <div class="feature-card p-8"> … </div>
+   ========================================================= */
+.feature-card {
+  border: 1px solid rgba(201, 169, 110, 0.15);
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(10px);
+  transition: border-color 0.4s ease, background 0.4s ease;
+}
+
+.feature-card:hover {
+  border-color: rgba(201, 169, 110, 0.4);
+  background: rgba(201, 169, 110, 0.04);
+}
+
+
+/* =========================================================
+   9. TIMELINE
+   =========================================================
+   Usage: wrap items in <div class="timeline-item"> … </div>
+   ========================================================= */
+.timeline-item {
+  position: relative;
+  padding-left: 2rem;
+}
+
+/* Gold dot at start of each item */
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.5rem;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-gold);
+}
+
+/* Connecting vertical line between items */
+.timeline-item::after {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 1.5rem;
+  bottom: -1rem;
+  width: 1px;
+  background: rgba(201, 169, 110, 0.2);
+}
+
+.timeline-item:last-child::after {
+  display: none;
+}
+
+
+/* =========================================================
+   10. IMAGE PLACEHOLDERS
+   ========================================================= */
+.img-placeholder {
+  background: linear-gradient(135deg, #1a1a1a 0%, #222222 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle gold shimmer overlay */
+.img-placeholder::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 40%, rgba(201, 169, 110, 0.05) 100%);
+}
+
+
+/* =========================================================
+   11. HORIZONTAL SCROLL PROGRESS DOTS
+   =========================================================
+   Rendered inside the sticky pin wrapper.
+   Active dot expands to signal current slide.
+   ========================================================= */
+.h-progress {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+.h-dot {
+  width: 24px;
+  height: 2px;
+  background: rgba(201, 169, 110, 0.3);
+  cursor: pointer;
+  transition: background var(--transition-base), width var(--transition-base);
+}
+
+.h-dot.active {
+  background: var(--color-gold);
+  width: 48px;
+}
+
+
+/* =========================================================
+   12. NAVBAR SCROLLED STATE
+   =========================================================
+   Class `.scrolled` is toggled by JS (initNavbarScroll).
+   ========================================================= */
+nav.scrolled {
+  padding: 1.25rem 3rem;
+}
+
+nav.scrolled::before {
+  background: rgba(10, 10, 10, 0.95);
+}
+
+
+/* =========================================================
+   13. GOLD BUTTON
+   =========================================================
+   Self-contained button/link with animated fill on hover.
+   Usage:
+     <a href="#" class="btn-gold">
+       <span>Label</span>
+       <span class="arrow">→</span>
+     </a>
+   ========================================================= */
+.btn-gold {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 2rem;
+  border: 1px solid var(--color-gold);
+  color: var(--color-gold);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background var(--transition-base), color var(--transition-base);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Fill layer slides in from left on hover */
+.btn-gold::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-gold);
+  transform: translateX(-101%);
+  transition: transform 0.35s ease;
+  z-index: 0;
+}
+
+.btn-gold:hover::before { transform: translateX(0); }
+.btn-gold:hover         { color: var(--color-dark); }
+
+/* Keep text / arrow above the fill layer */
+.btn-gold span { position: relative; z-index: 1; }
+.btn-gold .arrow {
+  position: relative;
+  z-index: 1;
+  transition: transform var(--transition-base);
+}
+.btn-gold:hover .arrow { transform: translateX(4px); }
+
+
+/* =========================================================
+   14. AMENITY TAB
+   ========================================================= */
+.amenity-tab {
+  border-bottom: 1px solid rgba(201, 169, 110, 0.15);
+  padding: 1.25rem 0;
+  cursor: pointer;
+  transition: color var(--transition-base);
+}
+
+.amenity-tab.active {
+  color: var(--color-gold);
+  border-bottom-color: var(--color-gold);
+}
+
+
+/* =========================================================
+   15. SCROLL-REVEAL ANIMATION
+   =========================================================
+   Elements start hidden and slide up when they enter the
+   viewport. JS (initScrollReveal) adds the .visible class.
+
+   Delay variants for staggering siblings:
+     .reveal-delay-1 — 150 ms
+     .reveal-delay-2 — 300 ms
+     .reveal-delay-3 — 450 ms
+   ========================================================= */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity var(--transition-slow), transform var(--transition-slow);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.15s; }
+.reveal-delay-2 { transition-delay: 0.30s; }
+.reveal-delay-3 { transition-delay: 0.45s; }
+
+
+/* =========================================================
+   16. CONTACT FORM INPUTS
+   =========================================================
+   Borderless inputs relying solely on a bottom border.
+   ========================================================= */
+.contact-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(201, 169, 110, 0.3);
+  color: var(--color-warm-white);
+  padding: 0.75rem 0;
+  font-size: 0.9rem;
+  font-family: var(--font-sans);
+  font-weight: 300;
+  outline: none;
+  width: 100%;
+  transition: border-color var(--transition-base);
+}
+
+.contact-input::placeholder { color: rgba(245, 240, 232, 0.3); }
+.contact-input:focus         { border-bottom-color: var(--color-gold); }
+
+
+/* =========================================================
+   17. 3D TILT IMAGE SECTION (.tilt3d-*)
+   =========================================================
+   Two-column section: left has text, right has a 3D
+   perspective card that rotates on mouse-move.
+   GSAP (initTilt3D) drives the rotation via quickTo.
+
+   Reuse: copy the .tilt3d-stage + .tilt3d-card markup into
+   any page and call VoltaUI.initTilt3D() with the relevant
+   card + glare selectors.
+   ========================================================= */
+
+.tilt3d-section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 7rem 5rem;
+  overflow: hidden;
+}
+
+.tilt3d-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+  align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ---- Text column ---- */
+.tilt3d-text {
+  /* inherits section-label / section-title / section-body */
+}
+
+/* ---- 3D stage: sets the perspective ---- */
+.tilt3d-stage {
+  position: relative;
+  perspective: 1200px;
+  /* Stage is slightly larger than card for shadow room */
+  padding: 2rem;
+}
+
+/* ---- Card: the element that rotates ---- */
+.tilt3d-card {
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  /* Initial state — GSAP will animate rotateX/rotateY */
+  will-change: transform;
+  transition: box-shadow 0.4s ease;
+  cursor: none;
+}
+
+.tilt3d-card:hover {
+  box-shadow:
+    0 40px 80px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(201, 169, 110, 0.15);
+}
+
+/* ---- Image inside card ---- */
+.tilt3d-img {
+  width: 100%;
+  height: 65vh;
+  object-fit: cover;
+  display: block;
+  transform: translateZ(0); /* promote to GPU layer */
+}
+
+/* ---- Glare overlay — shifts opposite to mouse (depth) ---- */
+.tilt3d-glare {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(201, 169, 110, 0.12) 0%,
+    transparent 60%
+  );
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  mix-blend-mode: screen;
+}
+
+.tilt3d-card:hover .tilt3d-glare {
+  opacity: 1;
+}
+
+/* ---- Caption badge, floats in front via translateZ ---- */
+.tilt3d-badge {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  background: rgba(10, 10, 10, 0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(201, 169, 110, 0.25);
+  padding: 0.75rem 1.25rem;
+  transform: translateZ(30px);
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.tilt3d-badge-label {
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
+.tilt3d-badge-value {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--color-warm-white);
+}
+
+/* ---- Drop shadow element (moves counter to tilt) ---- */
+.tilt3d-shadow {
+  position: absolute;
+  inset: 2rem;
+  background: rgba(0, 0, 0, 0.5);
+  filter: blur(30px);
+  border-radius: 4px;
+  z-index: -1;
+  will-change: transform;
+  transform: translateY(20px) scale(0.95);
+}
+
+
+/* =========================================================
+   18. SCROLL GALLERY  (.sg-*)
+   =========================================================
+   Measuna-style collage zoom:
+   5-image grid (3-col × 2-row) where the centre cell spans
+   both rows.  On scroll the 4 corner cells scatter outward
+   and the centre zooms to fill the full viewport.
+   GSAP ScrollTrigger pins `.sg-viewport` for the duration.
+   ========================================================= */
+
+/* Outer section just provides scroll height. */
+.sgallery-section {
+  position: relative;
+}
+
+/* Inner viewport — this element is GSAP-pinned. */
+.sg-viewport {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--color-dark);
+}
+
+/* Section header overlaid top-left. */
+.sg-header {
+  position: absolute;
+  top: 3.5rem;
+  left: 5rem;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.sg-heading {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 2.5vw, 2.5rem);
+  font-weight: 300;
+  color: var(--color-warm-white);
+  line-height: 1.2;
+  margin-top: 0.5rem;
+}
+
+/* 3-column × 2-row grid — column 2 is the wide centre. */
+.sg-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.7fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 6px;
+  width: 100%;
+  height: 100%;
+}
+
+.sg-cell {
+  position: relative;
+  overflow: hidden;
+}
+
+.sg-cell img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+}
+
+/* Corner placements */
+.sg-tl { grid-column: 1; grid-row: 1; }
+.sg-tr { grid-column: 3; grid-row: 1; }
+.sg-bl { grid-column: 1; grid-row: 2; }
+.sg-br { grid-column: 3; grid-row: 2; }
+
+/* Centre cell spans both rows and will be zoomed by GSAP. */
+.sg-center {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  z-index: 2;
+  will-change: transform;
+  transform-origin: center center;
+}
+
+/* Overlay text — hidden until the centre fills the viewport. */
+.sg-overlay-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 5rem;
+  z-index: 10;
+  opacity: 0;
+  transform: translateY(20px);
+  background: linear-gradient(to top, rgba(10,10,10,0.78) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   19. NOISE OVERLAY
+   =========================================================
+   Subtle grain texture applied as a fixed pseudo-element
+   on <body> to add organic depth to the dark background.
+   ========================================================= */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9990;
+  opacity: 0.3;
+}
+
+
+/* =========================================================
+   18. STICKY NARRATIVE SECTION (.sn-*)
+   =========================================================
+   Two-column layout: left panel is position:sticky (100vh),
+   right panel stacks full-height image items vertically.
+   An IntersectionObserver in JS (initStickyNarrative) watches
+   each .sn-image-item and updates the counter + caption.
+
+   Reuse: add class="sn-section" to any <section>, then follow
+   the #snLeft / .sn-right / .sn-image-item structure.
+   ========================================================= */
+
+/* Outer section — no min-height; height is driven by images */
+.sn-section {
+  position: relative;
+}
+
+/* Flex row that holds sticky-left + scroll-right */
+.sn-layout {
+  display: flex;
+  align-items: flex-start;
+}
+
+/* ---- LEFT: sticky panel (pinned by GSAP ScrollTrigger, not CSS sticky) ---- */
+.sn-left {
+  height: 100vh;
+  width: 45%;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 5rem 4rem 5rem 5rem;
+  background: var(--color-dark-2, #111111);
+  z-index: 2;
+  will-change: transform;
+}
+
+.sn-left-top {
+  /* label, title, divider, body */
+}
+
+.sn-left-bottom {
+  /* counter + caption — anchored to bottom */
+}
+
+/* Counter: "1 / 4" */
+.sn-counter {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+}
+
+.sn-counter-current {
+  font-family: var(--font-serif);
+  font-size: 3.5rem;
+  font-weight: 300;
+  color: var(--color-gold);
+  line-height: 1;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.sn-counter-sep,
+.sn-counter-total {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  font-weight: 300;
+  color: rgba(201, 169, 110, 0.4);
+}
+
+/* Caption text — fades + slides on change */
+.sn-caption {
+  font-family: var(--font-serif);
+  font-size: clamp(1rem, 1.4vw, 1.25rem);
+  font-weight: 300;
+  font-style: italic;
+  color: rgba(245, 240, 232, 0.65);
+  line-height: 1.55;
+  max-width: 34ch;
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+.sn-caption.is-transitioning {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+/* Progress bar along bottom edge of sticky left */
+.sn-left::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: var(--sn-progress, 25%);
+  height: 1px;
+  background: var(--color-gold);
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ---- RIGHT: scrolling images ---- */
+.sn-right {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Each image panel is full viewport height */
+.sn-image-item {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sn-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  /* Subtle scale on load / transition */
+  transform: scale(1.03);
+  transition: transform 0.8s ease;
+}
+
+.sn-image-item.is-active .sn-img {
+  transform: scale(1);
+}
+
+/* Dark gradient on left edge so text bleeds into image */
+.sn-img-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(17, 17, 17, 0.5) 0%,
+    transparent 40%
+  );
+  pointer-events: none;
+}
+
